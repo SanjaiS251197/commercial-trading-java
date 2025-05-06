@@ -2,6 +2,7 @@ package com.global.commtech.test.anagramfinder;
 
 
 import com.global.commtech.test.anagramfinder.util.AnagramUtil;
+import com.global.commtech.test.anagramfinder.util.OutputWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,34 +17,36 @@ import java.util.*;
 public class AnagramService {
 
     private final AnagramUtil util;
+    private final OutputWriter opWriter;
 
-    public void processFileByWordLength(File file) throws IOException {
+    public void processFileByWordLength(File file) {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             Map<String, List<String>> groups = new LinkedHashMap<>();
             int currentLength = -1;
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) continue;
+            String currentWord;
+            while ((currentWord = reader.readLine()) != null) {
+                currentWord = currentWord.trim();
+                if (currentWord.isEmpty()) continue;
 
-                int length = line.length();
+                int length = currentWord.length();
                 if (currentLength != -1 && length != currentLength) {
-                    util.printAnagramGroups(groups);
+                    opWriter.printAnagramGroups(groups);
                     groups.clear();
                 }
 
-                String key = util.sortCharacters(line);
-                groups.computeIfAbsent(key, k -> new ArrayList<>()).add(line);
+                String key = util.sortCharacters(currentWord);
+                groups.computeIfAbsent(key, k -> new ArrayList<>()).add(currentWord);
                 currentLength = length;
             }
 
             if (!groups.isEmpty()) {
-                util.printAnagramGroups(groups);
+                opWriter.printAnagramGroups(groups);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-
 
 }
 
