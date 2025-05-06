@@ -1,5 +1,6 @@
 package com.global.commtech.test.anagramfinder;
 import com.global.commtech.test.anagramfinder.util.AnagramUtil;
+import com.global.commtech.test.anagramfinder.util.OutputWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,6 +20,9 @@ public class AnagramServiceTest {
     @Mock
     private AnagramUtil anagramUtil;
 
+    @Mock
+    private OutputWriter opWriter;
+
     @InjectMocks
     private AnagramService anagramService;
 
@@ -37,7 +41,7 @@ public class AnagramServiceTest {
         anagramService.processFileByWordLength(testFile);
 
         // Assert
-        verify(anagramUtil, times(2)).printAnagramGroups(anyMap());
+        verify(opWriter, times(2)).printAnagramGroups(anyMap());
     }
 
 
@@ -50,7 +54,7 @@ public class AnagramServiceTest {
         anagramService.processFileByWordLength(testFile);
 
         // Assert
-        verify(anagramUtil, never()).printAnagramGroups(anyMap());
+        verify(opWriter, never()).printAnagramGroups(anyMap());
     }
 
 }
