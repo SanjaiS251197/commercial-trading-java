@@ -10,12 +10,14 @@ import org.springframework.util.Assert;
 @RequiredArgsConstructor
 public class AnagramCommandLineRunner implements CommandLineRunner {
 
+    private final AnagramService anagramService;
+
     @Override
     public void run(final String... args) throws Exception {
         Assert.isTrue(args.length == 1, "Please ensure that the input file is provided");
 
         final File file = new File(args[0]);
         Assert.isTrue(file.exists(), args[0] + " Does not exist");
-
+        anagramService.processFileByWordLength(file);
     }
 }
